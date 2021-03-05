@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Bank Details</title>
+  <style>
+  table, th, td {
+    border: 1px solid;
+    border-spacing: 0px;
+
+  } 
+  div, h3 {
+    width:50%; margin: 50px auto;
+    border: 1px;
+  }
+</style>
+</head>
+<body>
+    
+    <h3>Bank Branches</h3>
+<div class="search-container">
+  <form action="#">
+  <select name="city" id="city">
+    <option >delhi</option>
+    <option >bangalore</option>
+  </select>
+  <input type="text" placeholder="Search.." name="search">
+      <button type="submit"><i class="fa fa-search">Search</i></button>
+    </form>
+  
+</div>
+<div class="container">
+  <table>
+  <thead>
+    <tr>
+      <th scope="col-2">ifsc</th>
+      <th scope="col-2">bank_id</th>
+      <th scope="col-2">branch</th>
+      <th scope="col-2">address</th>
+      <th scope="col-2">city</th>
+      <th scope="col-2">district</th>
+      <th scope="col-2">state</th>
+      <th scope="col-2">bank_name</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for data in page_obj %}
+    <tr>
+      
+      <td>{{data.ifsc}}</td>
+      <td>{{data.bank_id}}</td>
+      <td>{{data.branch}}</td>
+      <td>{{data.address}}</td>
+      <td>{{data.city}}</td>
+      <td>{{data.district}}</td>
+      <td>{{data.state}}</td>
+      <td>{{data.bank}}</td>
+      
+    </tr>
+    {%endfor%}
+    
+  </tbody>
+</table>
+</div>
+<div>
+  <span>
+   {% if page_obj.has_previous %}
+    <a href="?page={{page_obj.previous_page_number}}">Previous</a>
+   {% endif %}
+
+    <span>{{ page_obj.number }}</span>
+
+   {% if page_obj.has_next %}
+    <a href="?page={{page_obj.next_page_number}}">Next</a>
+   {% endif %}
+  </span>
+ </div>
+
+</body>
+</html>
