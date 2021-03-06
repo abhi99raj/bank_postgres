@@ -1,10 +1,9 @@
-
 {% extends 'bank_details/base.html' %}
 
- {% block data %}
+{% block data %} 
  <tbody>
 
-    {% for data in page_obj %}
+    {% for data in page_obj1 %}
     <tr>
       
       <td>{{data.ifsc}}</td>
@@ -21,19 +20,18 @@
     {%endfor%}
     
   </tbody> 
-  {% endblock %}
 
+{% endblock %}
 
-  {% block page %}
- {% if page_obj.has_previous %}
+{% block page %}
+ {% if page_obj1.has_previous %}
     <a href="?page={{page_obj.previous_page_number}}">Previous</a>
    {% endif %}
 
-    <span>{{ page_obj.number }}</span>
+    <span>{{ page_obj1.number }}</span>
 
-   {% if page_obj.has_next %}
+   {% if page_obj1.has_next %}
     <a href="?page={{page_obj.next_page_number}}">Next</a>
    {% endif %}
 
  {% endblock %}
-

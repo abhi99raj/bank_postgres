@@ -1,10 +1,15 @@
-
 {% extends 'bank_details/base.html' %}
+
+{% block option%}
+{% for data in filterdata %}
+<option >{{data.city}}</option>
+{%endfor%}
+{% endblock %}
 
  {% block data %}
  <tbody>
 
-    {% for data in page_obj %}
+    {% for data in page_obj2 %}
     <tr>
       
       <td>{{data.ifsc}}</td>
@@ -24,16 +29,15 @@
   {% endblock %}
 
 
-  {% block page %}
- {% if page_obj.has_previous %}
+ {% block page %}
+ {% if page_obj2.has_previous %}
     <a href="?page={{page_obj.previous_page_number}}">Previous</a>
    {% endif %}
 
-    <span>{{ page_obj.number }}</span>
+    <span>{{ page_obj2.number }}</span>
 
-   {% if page_obj.has_next %}
+   {% if page_obj2.has_next %}
     <a href="?page={{page_obj.next_page_number}}">Next</a>
    {% endif %}
 
  {% endblock %}
-
