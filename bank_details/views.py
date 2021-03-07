@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .models import Branches
 from django.core.paginator import Paginator
 from django.db.models import Q
+import requests
 from django.http import HttpResponse
 import json
 
