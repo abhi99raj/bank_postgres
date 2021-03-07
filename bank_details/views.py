@@ -5,6 +5,24 @@ from django.db.models import Q
 import requests
 from django.http import HttpResponse
 import json
+import pandas as pd
+
+
+def feed_data(request):
+	data = pd.read_csv('../bank_branches.csv')
+	for item in data.to_dict():
+		obj = Branches(
+				ifsc = item['ifsc'],
+				bank_name = item['bank_name'],
+				bank_id = item['bank_id'],
+				branch = item['branch'],
+				address = item['address'],
+				city = item['city'],
+				district = item['district'],
+				state = item['state'],
+			)
+		obj.save()
+	return HttpResponse('<p>Saved sucessfully</p>')
 
 def filter(request):
 	if request.method == 'POST':
