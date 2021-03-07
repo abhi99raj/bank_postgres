@@ -5,7 +5,7 @@ from bank_details import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('bank_details.api.urls')),
-    path('home/', views.bankdetails, name="details"),
-    path('search/', views.search, name="search"),
+    path('get_data/<int:page>', views.get_data, name="get_data"),
+    path('get_data/',views.get_data,name='get_data1',kwargs={'page': 1}),
     path('city/', views.filter, name="city"),
 ]

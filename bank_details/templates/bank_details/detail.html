@@ -2,9 +2,16 @@
 {% extends 'bank_details/base.html' %}
 
  {% block data %}
- <tbody>
+ <form>
+ <select name="city_name" id="selctcity" onchange="setcity()">
+    {% for data in alldata_for_city %}
+    <option  value="{{data}}">{{data}}</option>
+    {% endfor %}
+    </select>
+  </form>
+ <tbody id="filtered_data">
 
-    {% for data in page_obj %}
+    {% for data in results %}
     <tr>
       
       <td>{{data.ifsc}}</td>
@@ -19,21 +26,52 @@
       
     </tr>
     {%endfor%}
-    
   </tbody> 
   {% endblock %}
 
 
   {% block page %}
- {% if page_obj.has_previous %}
-    <a href="?page={{page_obj.previous_page_number}}">Previous</a>
-   {% endif %}
-
-    <span>{{ page_obj.number }}</span>
-
-   {% if page_obj.has_next %}
-    <a href="?page={{page_obj.next_page_number}}">Next</a>
-   {% endif %}
-
+  
+     {% if alldata.previous %}
+        <a href="/get_data/{{get_previous_page_number}}" class="btn_class_next_previous">Previous</a>
+     {% endif %}
+     {% if alldata.next %}
+      <a href="/get_data/{{get_next_page_number}}" class="btn_class_next_previous">Next</a>
+     {% endif %}
+  
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    function setcity(){
+      var selected_city = document.getElementById("selctcity").value;
+      var csrf_token = '{{csrf_token}}';
+      var city_data = {"csrfmiddlewaretoken": csrf_token,
+                        "city": selected_city
+                      };
+      console.log(city_data);
+      $.ajax({
+          type: 'post',
+          url:  '{% url "city" %}',
+          data: city_data,
+          dataType: 'json',
+          success: function(data){
+            $('#filtered_data').html("");
+              console.log(data.alldata);
+              var results_data = data.alldata;
+              var i;
+              var table_data = "";
+              for (i = 0; i < results_data.length; i++) {
+                    var i_data = '<tr><td>'+results_data[i].ifsc+'</td><td>'+results_data[i].bank_name+'</td><td>'+results_data[i].bank_id+'</td><td>'+results_data[i].branch+'</td><td>'+results_data[i].address+'</td><td>'+results_data[i].city+'</td><td>'+results_data[i].district+'</td><td>'+results_data[i].state+'</td></tr>';
+                   table_data = table_data + i_data;
+              }
+              $('#filtered_data').html(table_data);
+              $('.btn_class_next_previous').css("display", 'none');
+              console.log(table_data);
+          },
+          error: function(xhr, status, error){
+              alert("no");
+          }
+      })
+}
+  </script>
  {% endblock %}
 

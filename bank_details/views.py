@@ -2,29 +2,66 @@ from django.shortcuts import render
 from .models import Branches
 from django.core.paginator import Paginator
 from django.db.models import Q
-
-def bankdetails(request):
-	alldata = Branches.objects.all()
-	paginator = Paginator(alldata, 2, orphans=0)
-	page_number = request.GET.get('page')
-	page_obj = paginator.get_page(page_number)
-	return render(request,'bank_details/detail.html',{'page_obj':page_obj})
-
-
-def search(request):
-	query = request.GET['query']
-	q1 = (Q(ifsc__icontains=query)|Q(bank_name__icontains=query)|Q(bank_id__icontains=query)|Q(branch__icontains=query)|Q(address__icontains=query)|Q(city__icontains=query)|Q(district__icontains=query)|Q(state__icontains=query))
-	searchdata = Branches.objects.filter(q1)
-	paginator = Paginator(searchdata, 2, orphans=0)
-	page_number = request.GET.get('page')
-	page_obj1 = paginator.get_page(page_number)
-	return render(request,'bank_details/search.html',{'page_obj1':page_obj1})
+import requests
+from django.http import HttpResponse
+import json
 
 def filter(request):
-	filterdata = Branches.objects.all()
-	query = request.GET['city']
-	fildata = Branches.objects.filter(city__icontains=query)
-	paginator = Paginator(fildata, 2, orphans=0)
-	page_number = request.GET.get('page')
-	page_obj2 = paginator.get_page(page_number)
-	return render(request,'bank_details/filter.html',{'page_obj2':page_obj2, 'filterdata':filterdata})
+	if request.method == 'POST':
+		city = request.POST['city']
+		url = 'http://127.0.0.1:8000/api/crud2/?city='+str(city)
+		r = None
+		if url is not None:
+			r = requests.get(url)
+		alldata=None
+		if r is not None:
+			alldata = r.json()
+		return HttpResponse(json.dumps({'alldata':alldata, 'filter_value':True}))
+	
+def get_data(request, page=1):
+	url = None
+	url_for_city = 'http://127.0.0.1:8000/api/crud2/'
+	if url_for_city is not None:
+		r_for_city = requests.get(url_for_city)
+	alldata_for_city = None
+	if r_for_city is not None:
+		alldata_for_city = r_for_city.json()
+		city_list = []
+		for item in alldata_for_city:
+			city_list.append(item['city'])
+	if page:
+		url = 'http://127.0.0.1:8000/api/crud/?page='+str(page)
+	r = None
+	if url is not None:
+		r = requests.get(url)
+	alldata = None
+	if r is not None:
+		alldata = r.json()
+	results = None
+	next_page = None
+	privious_page = None
+	if alldata is not None:
+		results = alldata['results']
+		next_page = alldata['next']
+		privious_page = alldata['previous']
+	get_next_page_number = None
+	get_previous_page_number = None
+	if alldata is not None and alldata['next'] and next_page is not None:
+		get_next_page_number = int(next_page.split("=")[1])
+	if alldata is not None and alldata['previous'] and privious_page is not None:
+		try:
+			get_previous_page_number = int(privious_page.split("=")[1])
+		except:
+			get_previous_page_number = 1
+	context = {'filter_value': False}
+	if results is not None and len(results) > 0:
+		context['results'] = results
+	if alldata is not None:
+		context['alldata'] = alldata
+	if get_previous_page_number is not None:
+		context['get_previous_page_number'] = get_previous_page_number
+	if get_next_page_number is not None:
+		context['get_next_page_number'] = get_next_page_number
+	if city_list is not None and len(city_list) > 0:
+		context['alldata_for_city'] = set(city_list)
+	return render(request,'bank_details/detail.html',context)
