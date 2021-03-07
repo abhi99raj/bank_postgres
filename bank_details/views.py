@@ -9,7 +9,7 @@ import json
 def filter(request):
 	if request.method == 'POST':
 		city = request.POST['city']
-		url = 'http://127.0.0.1:8000/api/crud2/?city='+str(city)
+		url = 'https://damp-ocean-14157.herokuapp.com/api/crud2/?city='+str(city)
 		r = None
 		if url is not None:
 			r = requests.get(url)
@@ -20,7 +20,7 @@ def filter(request):
 	
 def get_data(request, page=1):
 	url = None
-	url_for_city = 'http://127.0.0.1:8000/api/crud2/'
+	url_for_city = 'https://damp-ocean-14157.herokuapp.com/api/crud2/'
 	if url_for_city is not None:
 		r_for_city = requests.get(url_for_city)
 	alldata_for_city = None
@@ -30,7 +30,7 @@ def get_data(request, page=1):
 		for item in alldata_for_city:
 			city_list.append(item['city'])
 	if page:
-		url = 'http://127.0.0.1:8000/api/crud/?page='+str(page)
+		url = 'https://damp-ocean-14157.herokuapp.com/api/crud/?page='+str(page)
 	r = None
 	if url is not None:
 		r = requests.get(url)
