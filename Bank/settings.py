@@ -86,7 +86,7 @@ WSGI_APPLICATION = 'Bank.wsgi.application'
 #     }
 # }
 
-DEBUG = config('DEBUG', default=False, cast=bool)
+# DEBUG = config('DEBUG', default=False, cast=bool)
 DATABASES = {
     'default': dj_database_url.config(
         default=config('postgres://dmiopgurqswkge:7d1c36cc373fab5e5328d58c3e344dd6fa384115d78161694d227ac4717c0775@ec2-54-197-228-62.compute-1.amazonaws.com:5432/dbje096psetjnj')
