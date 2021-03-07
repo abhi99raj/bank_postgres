@@ -79,11 +79,19 @@ WSGI_APPLICATION = 'Bank.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+SECRET_KEY = config('SECRET_KEY')
+DEBUG = config('DEBUG', default=False, cast=bool)
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default=config('postgres://dmiopgurqswkge:7d1c36cc373fab5e5328d58c3e344dd6fa384115d78161694d227ac4717c0775@ec2-54-197-228-62.compute-1.amazonaws.com:5432/dbje096psetjnj')
+    )
 }
 
 # DATABASES = {
