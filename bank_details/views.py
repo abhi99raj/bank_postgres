@@ -9,7 +9,7 @@ import pandas as pd
 
 
 def feed_data(request):
-	data = pd.read_csv('/Bank/bank_branches.csv')
+	data = pd.read_csv('bank_branches.csv')
 	for item in data.to_dict():
 		obj = Branches(
 				ifsc = item['ifsc'],
