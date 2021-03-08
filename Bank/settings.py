@@ -76,8 +76,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'Bank.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
+Database
+https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 # DATABASES = {
 #     'default': {
@@ -89,9 +89,9 @@ WSGI_APPLICATION = 'Bank.wsgi.application'
 
 import dj_database_url
 DATABASES = {
-    'default': dj_database_url.config(
-        conn_max_age=600, ssl_require=True
-    )
+   'default': dj_database_url.config(
+       conn_max_age=600, ssl_require=True
+   )
 }
 
 # DATABASES = {
